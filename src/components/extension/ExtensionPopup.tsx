@@ -4,7 +4,24 @@ import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { Leaf, TrendingUp, Award, Settings } from "lucide-react";
 
+// `chrome` may not be available in non-extension contexts; declare for TS
+declare const chrome: any;
+
 export const ExtensionPopup = () => {
+  const openDashboard = () => {
+    try {
+      // Prefer chrome.runtime URL when available (extension context)
+      const base = typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.getURL
+        ? chrome.runtime.getURL("index.html")
+        : "/index.html";
+      const url = `${base}#/dashboard`;
+      window.open(url, "_blank");
+    } catch (e) {
+      // Fallback
+      window.open("/index.html#/dashboard", "_blank");
+    }
+  };
+
   return (
     <Card className="w-80 p-5 space-y-4 border-2 shadow-xl">
       <div className="flex items-center justify-between">
@@ -60,7 +77,7 @@ export const ExtensionPopup = () => {
         </p>
       </div>
 
-      <Button className="w-full bg-gradient-to-r from-primary to-earth-moss hover:opacity-90 transition-opacity">
+      <Button onClick={openDashboard} className="w-full bg-gradient-to-r from-primary to-earth-moss hover:opacity-90 transition-opacity">
         View Full Dashboard
       </Button>
     </Card>

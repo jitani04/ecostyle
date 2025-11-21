@@ -71,3 +71,27 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Browser extension build / load instructions
+
+This repo includes a basic Chromium/Firefox extension manifest at `public/manifest.json` and minimal placeholders for a popup and content script. Use the following to build and load the extension locally:
+
+1. Install deps and build the app:
+
+```
+npm install
+npm run build
+```
+
+2. After the build completes, the output will be in `dist/` (Vite default). In Chrome/Edge/Brave open Extensions -> Load unpacked and select the `dist/` folder.
+
+3. In Firefox use `about:debugging` -> This Firefox -> Load Temporary Add-on and choose `dist/manifest.json`.
+
+Notes:
+- The manifest currently uses `popup.html` (in `public/`) for the action popup and `content-script.js` / `content-styles.css` as a small placeholder content script. You can replace these with your built bundle entrypoints or wire Vite to build separate entry points if you want a reactive popup bundled by Vite.
+- Icons are using `public/placeholder.svg`. Replace with proper PNG/WebP images for best compatibility.
+
+If you want, I can:
+- Wire a dedicated Vite entry for the extension popup and background worker so the built `dist/` contains a bundled JS/CSS popup.
+- Add a small background service worker to the manifest and a demo message flow between popup <-> content script.
+

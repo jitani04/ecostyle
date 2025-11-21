@@ -8,17 +8,17 @@
     "storage"
   ],
   "action": {
-    "default_popup": "index.html",
+    "default_popup": "popup.html",
     "default_icon": {
-      "16": "icon-16.png",
-      "48": "icon-48.png",
-      "128": "icon-128.png"
+      "16": "placeholder.svg",
+      "48": "placeholder.svg",
+      "128": "placeholder.svg"
     }
   },
   "icons": {
-    "16": "icon-16.png",
-    "48": "icon-48.png",
-    "128": "icon-128.png"
+    "16": "placeholder.svg",
+    "48": "placeholder.svg",
+    "128": "placeholder.svg"
   },
   "content_scripts": [
     {
