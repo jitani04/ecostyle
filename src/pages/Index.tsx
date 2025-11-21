@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ExtensionPopup } from "@/components/extension/ExtensionPopup";
 import { BrandInfoOverlay } from "@/components/extension/BrandInfoOverlay";
 import { ProductRecommendations } from "@/components/extension/ProductRecommendations";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
+  const navigate = useNavigate();
   const [activeDemo, setActiveDemo] = useState<"popup" | "brand" | "products">("popup");
 
   return (
@@ -21,9 +24,15 @@ const Index = () => {
               EcoStyle
             </h1>
           </div>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
             Shop sustainably with AI-powered recommendations and brand transparency
           </p>
+          <Button 
+            onClick={() => navigate("/auth")}
+            className="bg-gradient-to-r from-primary to-earth-moss hover:opacity-90"
+          >
+            Get Started
+          </Button>
         </div>
 
         <Tabs value={activeDemo} onValueChange={(v) => setActiveDemo(v as any)} className="max-w-5xl mx-auto">
