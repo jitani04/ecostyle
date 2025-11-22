@@ -43,4 +43,3 @@ npm run build
 ```
 
 2. After the build completes, the output will be in `dist/` (Vite default). In Chrome/Edge/Brave open Extensions -> Load unpacked and select the `dist/` folder.
-

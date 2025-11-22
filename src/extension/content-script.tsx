@@ -55,12 +55,57 @@ function injectBadge(scoreText: string) {
   document.documentElement.appendChild(badge);
 }
 
+// // Inject recommendations sidebar
+// function injectRecommendations(brands: any[]) {
+//   // remove existing
+//   const old = document.getElementById("eco-recommendations");
+//   if (old) old.remove();
+
+//   const panel = document.createElement("div");
+//   panel.id = "eco-recommendations";
+//   panel.style.position = "fixed";
+//   panel.style.top = "0";
+//   panel.style.right = "0";
+//   panel.style.width = "260px";
+//   panel.style.height = "100%";
+//   panel.style.background = "white";
+//   panel.style.boxShadow = "0 0 12px rgba(0,0,0,0.15)";
+//   panel.style.padding = "16px";
+//   panel.style.fontFamily =
+//     "system-ui, -apple-system, Segoe UI, Roboto, sans-serif";
+//   panel.style.zIndex = "2147483646";
+
+//   const title = document.createElement("h2");
+//   title.textContent = "Top Sustainable Brands";
+//   title.style.fontSize = "18px";
+//   title.style.marginBottom = "12px";
+
+//   panel.appendChild(title);
+
+//   brands.forEach((b) => {
+//     const item = document.createElement("div");
+//     item.style.marginBottom = "12px";
+
+//     item.innerHTML = `
+//       <div style="font-weight: bold">${b.brand_name}</div>
+//       <div style="font-size: 14px; color: #555">Score: ${b.overall_score}</div>
+//       <a href="${b.brand_url}" target="_blank" style="font-size: 13px; color: #0ea5a4">Visit</a>
+//       <hr style="margin-top:8px; opacity:0.2"/>
+//     `;
+
+//     panel.appendChild(item);
+//   });
+
+//   document.documentElement.appendChild(panel);
+// }
+
 async function run() {
-  const brand = detectBrandFromPage();
-  if (!brand) return;
+  const detectedBrand = detectBrandFromPage();
+  const hostname = window.location.hostname;
+  if (!detectedBrand) return;
 
   // ask background for the score
-  chrome.runtime.sendMessage({ type: 'GET_BRAND_SCORE', brand }, (resp) => {
+  chrome.runtime.sendMessage({ type: 'GET_BRAND_SCORE', brand: detectedBrand }, (resp) => {
     if (!resp) return;
     if (resp.ok) {
       injectBadge(String(resp.score ?? '—'));
@@ -68,6 +113,17 @@ async function run() {
       console.error('Error getting brand score', resp.error);
     }
   });
+
+  // // ask for recommendations (top 5 sustainable brands)
+  // chrome.runtime.sendMessage(
+  //   { type: "GET_RECOMMENDED_BRANDS", hostname },
+  //   (resp) => {
+  //     if (!resp) return;
+  //     if (resp.ok) {
+  //       injectRecommendations(resp.recommendations);
+  //     }
+  //   }
+  // );
 }
 
 // run on initial load + maybe on SPA route changes (optional)

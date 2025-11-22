@@ -1,5 +1,6 @@
 // src/extension/background.ts
 import { createClient } from '@supabase/supabase-js';
+
 declare const chrome: any;
 // Vite will replace import.meta.env.* values at build time.
 // Use env vars (VITE_SUPABASE_URL, VITE_SUPABASE_PUBLISHABLE_KEY) for client-side reads.
@@ -103,6 +104,43 @@ async function queryOverallScoreByUrl(url: string) {
   }
 }
 
+/** Fetch all brands from Supabase */
+async function fetchBrands() {
+  const { data, error } = await supabase.from("brands").select("*");
+
+  if (error) {
+    console.error("Supabase query error:", error);
+    return [];
+  }
+
+  return data;
+}
+
+/** Compute recommendations based on current site’s price tier */
+async function getTopRecommendations(hostname: string) {
+  const brands = await fetchBrands();
+
+  // Find brand that matches the website
+  const currentBrand = brands.find((b) => {
+    try {
+      return hostname.includes(new URL(b.brand_url).hostname);
+    } catch {
+      return false;
+    }
+  });
+
+  const priceTier = currentBrand?.price_tier;
+
+  // Filter sustainable brands (score >= 60)
+  const recommendations = brands
+    .filter((b) => b.overall_score >= 60)
+    .filter((b) => (priceTier ? b.price_tier === priceTier : true))
+    .sort((a, b) => b.overall_score - a.overall_score)
+    .slice(0, 5);
+
+  return { currentBrand, recommendations };
+}
+
 // Listen for messages from content scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   try {
@@ -134,6 +172,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         });
       return true;
     }
+
+    /* GET_RECOMMENDED_BRANDS to display to user */
+    if (message.type === "GET_RECOMMENDED_BRANDS" && message.hostname) {
+      getTopRecommendations(message.hostname)
+        .then(result => sendResponse({ ok: true, ...result }))
+        .catch(err => sendResponse({ ok: false, error: String(err) }));
+      return true;
+    }
+
   } catch (e) {
     console.error('[background] onMessage handler exception', e);
     try {

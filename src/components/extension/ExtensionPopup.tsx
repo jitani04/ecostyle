@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Leaf, TrendingUp, Award, Settings } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 
 // `chrome` may not be available in non-extension contexts; declare for TS
 declare const chrome: any;
@@ -26,6 +27,10 @@ export const ExtensionPopup = () => {
   const [score, setScore] = React.useState<number | null>(null);
   const [foundBrand, setFoundBrand] = React.useState<string | null>(null);
   const [error, setError] = React.useState<string | null>(null);
+
+  const [recsLoading, setRecsLoading] = React.useState(false);
+  const [recommendations, setRecommendations] = React.useState<any[]>([]);
+  const [currentBrandTier, setCurrentBrandTier] = React.useState<string | null>(null);
 
   const getBrandScore = () => {
     setLoading(true);
@@ -87,6 +92,54 @@ export const ExtensionPopup = () => {
     }
   };
 
+  const getRecommendations = () => {
+    setRecsLoading(true);
+    setError(null);
+    setRecommendations([]);
+
+    try {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs: any) => {
+        const tab = tabs[0];
+        if (!tab?.url) {
+          setError("Could not determine active tab URL");
+          setRecsLoading(false);
+          return;
+        }
+
+        const hostname = new URL(tab.url).hostname;
+
+        chrome.runtime.sendMessage(
+          { type: "GET_RECOMMENDED_BRANDS", hostname },
+          (resp: any) => {
+            if (chrome.runtime.lastError) {
+              setError(String(chrome.runtime.lastError.message));
+              setRecsLoading(false);
+              return;
+            }
+
+            if (!resp) {
+              setError("No response from background");
+              setRecsLoading(false);
+              return;
+            }
+
+            if (resp.ok) {
+              setCurrentBrandTier(resp.currentBrand?.price_tier ?? null);
+              setRecommendations(resp.recommendations ?? []);
+            } else {
+              setError(resp.error ?? "Unknown error");
+            }
+
+            setRecsLoading(false);
+          }
+        );
+      });
+    } catch (e) {
+      setError(String(e));
+      setRecsLoading(false);
+    }
+  };
+  
   return (
     <Card className="w-80 p-5 space-y-4 border-2 shadow-xl">
       <div className="flex items-center justify-between">
@@ -144,6 +197,9 @@ export const ExtensionPopup = () => {
         <Button onClick={getBrandScore} className="w-full bg-indigo-600 hover:opacity-90 transition-opacity">
           Get Brand Score
         </Button>
+        <Button onClick={getRecommendations} className="w-full bg-emerald-600 hover:opacity-90 transition-opacity">
+          Show Recommended Brands
+        </Button>
         <Button onClick={openDashboard} className="w-full bg-gradient-to-r from-primary to-earth-moss hover:opacity-90 transition-opacity">
           View Full Dashboard
         </Button>
@@ -162,6 +218,46 @@ export const ExtensionPopup = () => {
         ) : (
           <div className="text-sm text-muted-foreground">No brand score loaded</div>
         )}
+      </div>
+
+      <div className="pt-3">
+        {recsLoading ? (
+          <div className="text-sm text-muted-foreground">Loading recommendations…</div>
+        ) : recommendations.length > 0 ? (
+          <div className="space-y-2">
+            <div className="text-sm font-medium">
+              Recommended Sustainable Brands
+            </div>
+
+            <div className="text-xs text-muted-foreground mb-1">
+              {currentBrandTier
+                ? `Based on your site's price tier: ${currentBrandTier}`
+                : "Top sustainable picks"}
+            </div>
+
+            {recommendations.map((b, i) => (
+                <a
+                  key={i}
+                  href={b.brand_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-2 border rounded-lg text-sm hover:bg-muted/10 transition-colors"
+                >
+                  <div className="font-medium">{b.brand_name}</div>
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    Score: {b.overall_score}
+                    <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                  </div>
+                </a>
+              // <div key={i} className="p-2 border rounded-lg text-sm">
+              //   <div className="font-medium">{b.brand_name}</div>
+              //   <div className="text-xs text-muted-foreground">
+              //     Score: {b.overall_score}
+              //   </div>
+              // </div>
+            ))}
+          </div>
+        ) : null}
       </div>
     </Card>
   );
