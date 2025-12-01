@@ -1,3 +1,17 @@
+--index-url https://download.pytorch.org/whl/cpu
+torch
+torchvision
+torchaudio
+Pillow
+requests
+python-dotenv
+supabase
+ftfy
+regex
+timm
+git+https://github.com/openai/CLIP.git
+uvicorn
+python-multipart
 fastapi
 uvicorn
 torch
