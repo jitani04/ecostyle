@@ -11,6 +11,7 @@ npm install
 
 # Step 4: Start the development server with auto-reloading and an instant preview.
 npm run build
+
 After the build completes, the output will be in `frontend/dist/` In Chrome/Edge/Brave open Extensions -> Load unpacked and select the `frontend/dist/` folder.
 
 
@@ -24,7 +25,7 @@ uvicorn CLIP_text_rec_backend:app --reload
 go to the link to access the backend and test it out, click on the /search endpoint and upload an image of a product image:
     http://localhost:8000/docs
 
-This project is built with:
+# This project is built with:
 
 - Vite
 - TypeScript
