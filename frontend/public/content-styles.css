@@ -1,0 +1,4 @@
+/* Minimal styles for content script UI that the extension may inject. */
+.ecostyle-badge { 
+  display:inline-block; 
+}
