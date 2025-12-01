@@ -329,6 +329,12 @@ try {
   chrome.runtime.onMessage.addListener((message: any, _sender: any, sendResponse: any) => {
     if (!message || message.type !== 'CAPTURE_PRODUCT_IMAGE') return undefined;
 
+    // Only the top frame should respond to avoid child iframes replying with "no-image-found".
+    if (frameLabel !== 'top') {
+      log('ignoring CAPTURE_PRODUCT_IMAGE in non-top frame');
+      return undefined;
+    }
+
     log('CAPTURE_PRODUCT_IMAGE received');
 
     handleCaptureProductImage(sendResponse);

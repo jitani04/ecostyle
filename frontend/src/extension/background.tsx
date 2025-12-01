@@ -78,7 +78,7 @@ function normalizeMatches(matches: RecommendationMatch[] | undefined, assetsBase
   });
 }
 
-const DEFAULT_RECOMMEND_API_URL = 'http://localhost:8000/api/recommend';
+const DEFAULT_RECOMMEND_API_URL = 'http://localhost:8000/search';
 const RECOMMEND_API_URL =
   import.meta.env.VITE_RECOMMEND_API_URL || DEFAULT_RECOMMEND_API_URL;
 
@@ -110,7 +110,10 @@ async function requestSimilarItems(imageDataUrl: string, k?: number) {
   const payload = (await response.json()) as RecommendationApiResponse;
   if (payload?.error) throw new Error(payload.error);
 
-  return { matches: normalizeMatches(payload?.matches, RECOMMEND_ASSETS_BASE_URL) };
+  // Support both /api/recommend (matches) and /search (results) shapes
+  const rawMatches = (payload as any)?.matches ?? (payload as any)?.results ?? [];
+
+  return { matches: normalizeMatches(rawMatches, RECOMMEND_ASSETS_BASE_URL) };
 }
 
 /**
