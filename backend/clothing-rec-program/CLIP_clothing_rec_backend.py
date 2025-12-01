@@ -21,6 +21,10 @@ HOW TO RUN:
     pip install fastapi uvicorn
     pip install python-multipart
 
+    i pray to god this works...
+        pip install numpy==1.26.4
+    oh my god it worked i can rest in peace now...
+
 * use this command to run the backend:
     uvicorn CLIP_clothing_rec_backend:app --reload
 
@@ -43,7 +47,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_SECRET_KEY)
 
 # --- Load FashionCLIP ---
 device = "cuda" if torch.cuda.is_available() else "cpu"
-model, preprocess = clip.load("ViT-B/32", device=device)
+model, preprocess = clip.load("ViT-B/16", device=device) # upgraded model from ViT-B/32 to ViT-B/16
 
 app = FastAPI()
 
@@ -59,6 +63,10 @@ app.add_middleware(
 def root():
     return {"status": "ok"}
 
+'''
+Compute the CLIP embedding for a given image. We will replace this to instead create text embeddings based on clothing type and color. 
+See CLIP_text_rec_backend.py for that implementation.
+'''
 def compute_embedding(image: Image.Image):
     image_tensor = preprocess(image).unsqueeze(0).to(device)
     with torch.no_grad():
