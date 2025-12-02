@@ -1,7 +1,7 @@
 # Sustainable Fashion Assistant
 
 # Step 1: Clone the repository using the project's Git URL.
-* git clone https://github.com/jitani04/eco-wardrobe.git
+* git clone https://github.com/jitani04/ecostyle.git
 
 # Step 2: Navigate to the project directory.
 * cd ecostyle
