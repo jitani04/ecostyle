@@ -331,7 +331,7 @@ export const ExtensionPopup = () => {
               const src = item.image_url || item.image_path || '';
               const productUrl = (item as any).item_url || (item as any).product_url || (item as any).page_url || item.image_url || '';
               const brand = (item as any).brand_name || null;
-              const price = (item as any)(item as any).price_usd || null;
+              const price = (item as any).price_usd || null;
               return (
                 <div key={`similar-${idx}`} className="flex flex-col items-start gap-2 rounded border bg-card p-2 shadow-sm">
                   {src ? (
