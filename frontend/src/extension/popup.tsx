@@ -19,19 +19,17 @@ const rootEl = document.getElementById("root");
 if (rootEl) {
   createRoot(rootEl).render(
     <React.StrictMode>
-      <div style={{ padding: 8, width: 320 }}>
         <div style={{ display: "flex", gap: 8, marginBottom: 8, justifyContent: "flex-end" }}>
           <button
             onClick={closePopup}
-            style={{ padding: "6px 8px", borderRadius: 6, border: "1px solid #e5e7eb", background: "#ef4444", color: "white", cursor: "pointer" }}
-            title="Close popup"
+            style={{ padding: "4px 8px", borderRadius: 6, border: "1px solid #e5e7eb", background: "#ef4444", color: "white", cursor: "pointer", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700 }}
+            title="Close"
           >
-            Close
+            ×
           </button>
         </div>
 
         <ExtensionPopup />
-      </div>
     </React.StrictMode>
   );
 } else {
