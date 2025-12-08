@@ -1,27 +1,31 @@
 # Sustainable Fashion Assistant
 
-# Step 1: Clone the repository using the project's Git URL.
+# Step 1: Clone the repository
 * git clone https://github.com/jitani04/ecostyle.git
 
-# Step 2: Navigate to the project directory.
+# Step 2: Navigate to the project directory
 * cd ecostyle
 
-# Step 3: Install the necessary dependencies.
+# Step 3: Install the necessary dependencies
 * npm install
 
-# Step 4: Ensure you have the proper .env file to connect to the Supabase, it should have the following:
+# Step 4: Ensure you have the proper .env file 
+To connect to the Supabase, it should have the following:
 * VITE_SUPABASE_PROJECT_ID
 * VITE_SUPABASE_PUBLISHABLE_KEY
 * VITE_SUPABASE_URL
 * SUPABASE_SECRET_KEY
 * VITE_RECOMMEND_API_URL="http://localhost:8000/search"
-* to access our database, reach out and we can provide the keys
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+Note: to access our database, please reach out and we can provide the keys
+
+# Step 4: Start the development server 
+The following commands use auto-reloading and provide an instant preview:
 * cd frontend
 * npm run build
 
-After the build completes, the output will be in `frontend/dist/` In Chrome/Edge/Brave open Extensions -> Load unpacked and select the `frontend/dist/` folder.
+After the build completes, the output will be in `frontend/dist/` 
+In Chrome/Edge/Brave open Extensions -> Load unpacked and select the `frontend/dist/` folder.
 
 # Step 4: Run the backend server
 * cd backend
@@ -40,7 +44,7 @@ pip install python-multipart
 pip install numpy==1.26.4
 ```
 
-use these command to run the backend:
+use these commands to run the backend:
 * cd clothing-rec-program
 * uvicorn CLIP_text_rec_backend:app --reload
 
@@ -59,5 +63,7 @@ you can now go to your favorite online clothing website and test the extension o
 - shadcn-ui
 - Tailwind CSS
 
-<img width="206" height="274" alt="EcoStyle" src="https://github.com/user-attachments/assets/b6373701-b128-4c29-b475-3b820248ea7d" />
+# Final Presentation:
+[Ecostyle Final Poster.pdf](https://github.com/user-attachments/files/24030850/Ecostyle.Final.Poster.pdf)
 
+<img width="206" height="274" alt="EcoStyle" src="https://github.com/user-attachments/assets/b6373701-b128-4c29-b475-3b820248ea7d" />
