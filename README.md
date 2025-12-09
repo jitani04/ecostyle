@@ -67,3 +67,5 @@ you can now go to your favorite online clothing website and test the extension o
 [Ecostyle Final Poster.pdf](https://github.com/user-attachments/files/24030850/Ecostyle.Final.Poster.pdf)
 
 <img width="206" height="274" alt="EcoStyle" src="https://github.com/user-attachments/assets/b6373701-b128-4c29-b475-3b820248ea7d" />
+<img width="3456" height="2304" alt="EcoWardrobe Affordable Sustainable Fashion Poster" src="https://github.com/user-attachments/assets/03a3e5dd-3ae7-45c1-8dd7-d479b0122ee1" />
+
